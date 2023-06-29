@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:water_tank_mobile/Pages/HomePage/HomePage.dart';
 
 import 'Pages/SignInPage/SignInPage.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SignInPage(),
+      home: const HomePage(),
     );
   }
 }
