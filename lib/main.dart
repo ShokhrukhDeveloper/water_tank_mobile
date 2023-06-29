@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:water_tank_mobile/Pages/HomePage/HomePage.dart';
 
+import 'MyHttp.dart';
 import 'Pages/SignInPage/SignInPage.dart';
 
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
