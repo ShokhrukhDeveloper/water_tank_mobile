@@ -1,9 +1,10 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:water_tank_mobile/API/API.dart';
 import 'package:water_tank_mobile/Data/Extension/Extension.dart';
 import 'package:water_tank_mobile/Data/Model/Company.dart';
 import 'package:water_tank_mobile/Data/Model/Product.dart';
+import 'package:water_tank_mobile/Data/Urls/Urls.dart';
 import 'package:water_tank_mobile/Pages/HomePage/Pages/Cart.dart';
 import 'package:water_tank_mobile/Pages/Widgets/ProductItem.dart';
 class Home extends StatefulWidget {
@@ -107,7 +108,7 @@ class _HomeState extends State<Home> {
                   height: 140,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image: const DecorationImage(image: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX1hBEkw10kJMHXrHG-a95PWeSRVQBy-ddLKgcg017wpb7obUUtt5oEC7BhtYOczirQVw&usqp=CAU"),fit: BoxFit.cover)
+                    image:  DecorationImage(image: NetworkImage("${AppUrls.images}${company?.image}"),fit: BoxFit.cover)
                   ),
                 )
               ],
@@ -139,7 +140,12 @@ class _HomeState extends State<Home> {
                       setState(() {
                       });
                     }
-                  }, text: e.name??"",  count: "+", price: e.priceOut??0, visiblity: !Cart.cart.exits(e),))
+                  }, text: e.name??"",
+                    count: "+",
+                    price: e.priceOut??0,
+                    visiblity: !Cart.cart.exits(e),
+                  url: "${AppUrls.images}${e.image}",
+                  ))
                 ,
               ],
             ),

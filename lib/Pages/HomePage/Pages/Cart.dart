@@ -5,6 +5,7 @@ import 'package:water_tank_mobile/Data/Model/Order.dart';
 import 'package:water_tank_mobile/Data/Model/Product.dart';
 import 'package:water_tank_mobile/Pages/Widgets/ProductItem.dart';
 import 'package:water_tank_mobile/Pages/Widgets/ProductItemCart.dart';
+import 'package:water_tank_mobile/Pages/Widgets/progress.dart';
 class Cart extends StatefulWidget {
    Cart({Key? key}) : super(key: key);
   static final cart=<Product>[].obs;
@@ -16,20 +17,35 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
  Future<void> createOrder()async
  {
-   var orderList=<Order>[];
-   for(var tin in Cart.cart)
+   showProgress(context);
+
+   try{
+     var orderList=<Order>[];
+     for(var tin in Cart.cart)
      {
        if(!(tin.count<=0)) {
          var res = await API.createOrder(quantity: tin.count, productId: tin.id!.toInt());
          if(res!=null)
-           {
-             orderList.add(res);
-           }
+         {
+           orderList.add(res);
+           Cart.cart.remove(res);
+         }
        }
      }
-   Cart.cart.clear();
+     Cart.cart.clear();
+
+   }catch(e){
+     await Future.delayed(const Duration(seconds: 2),()=>Navigator.pop(context));
+     ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text("Xatolik yuz berdi $e"), backgroundColor: Colors.red,));
+     return;
+   }
+   await Future.delayed(const Duration(seconds: 2),()=>Navigator.pop(context));
    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Buyurtma muvafaqqiyatli yaratildi"), backgroundColor: Colors.green,));
+
+
+
  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +57,7 @@ class _CartState extends State<Cart> {
             itemCount: Cart.cart.length,
             itemBuilder: (c,i)=>ProductItemCart(onTapPlus: (){
               Cart.cart[i].count++;
-              setState(() {
-
-              });
+              setState(() {});
             }, text: "${Cart.cart[i].name}", onTapMinus: (){
               Cart.cart[i].count--;
               setState(() {

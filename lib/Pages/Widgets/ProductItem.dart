@@ -26,9 +26,18 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
       ),
       child: Row(
         children: [
-          Image.network(widget.url??"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLcjNkl2MXOmYuUPey2aOKWlLTS4Uz8tFUZXIxaejxdA&s",
-            width: 60,
-            height: 60,),
+          Container(
+            width: 50,
+            height: 60,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                image: NetworkImage("${widget.url}"),
+                fit: BoxFit.cover
+              )
+            ),
+          ),
+          SizedBox(width: 20,),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
