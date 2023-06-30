@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:water_tank_mobile/Pages/HomePage/Pages/Notification/Created.dart';
-import 'package:water_tank_mobile/Pages/HomePage/Pages/Notification/OrderItem.dart';
+
 
 import 'Completed.dart';
 import 'Delivering.dart';
@@ -41,8 +41,9 @@ class Notification extends StatelessWidget {
           ),
           body: const TabBarView(children: [
             CreatedWidget(),
+            DeliveringWidget(),
             CompletedWidget(),
-            DeliveringWidget()
+
 
 
           ]

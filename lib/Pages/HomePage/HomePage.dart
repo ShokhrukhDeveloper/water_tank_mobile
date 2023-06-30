@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
 
   static final List<Widget> _pages=[const Home(), Cart(), N.Notification(), const Account()];
   static final List<String> _pagesTitle=[
-    "Company Name here",
+    "Suv",
     "Cart",
     "Notification",
     "Account",

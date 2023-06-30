@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:water_tank_mobile/Data/Model/Order.dart';
 
 
@@ -10,6 +11,7 @@ static const style=TextStyle(
     fontWeight: FontWeight.w600,
     color: Color(0xff0074B4)
 );
+static final  format=DateFormat("yyyy.MM.dd - hh:mm");
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,9 +32,9 @@ static const style=TextStyle(
           Text("Suv: ${order.productName}", style: style),
           Text("Soni: ${order.quantity}", style: style),
           Text("Narxi: ${order.price}", style: style),
-          Text("Yaratildi: ${order.createdAt}", style: style),
-          Text("Qabul qilindi: ${order.acceptedAt}", style: style),
-          Text("Yakunlandi: ${order.acceptedAt}", style: style),
+          if(order.createdAt!=null)Text("Yaratildi: ${format.format(DateTime.parse(order.createdAt!))}", style: style),
+          if(order.acceptedAt!=null)Text("Qabul qilindi: ${format.format(DateTime.parse(order.acceptedAt!))}", style: style),
+          if(order.deliveredAt!=null)Text("Yakunlandi: ${format.format(DateTime.parse(order.deliveredAt!))}", style: style),
 
 
           SizedBox(height: 5,),
