@@ -39,6 +39,7 @@ dependencies:
   get: ^4.6.5
   intl: ^0.18.1
   get_storage: ^2.1.1
+  flutter_multi_formatter: ^2.11.1
 
 dev_dependencies:
   flutter_test:

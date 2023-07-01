@@ -1,96 +1,125 @@
 import 'package:flutter/material.dart';
 import 'package:water_tank_mobile/API/API.dart';
 import 'package:water_tank_mobile/Data/Model/Token.dart';
+import 'package:water_tank_mobile/Data/Model/User.dart';
 import 'package:water_tank_mobile/Data/Storage/LocalStorage.dart';
 import 'package:water_tank_mobile/Pages/Widgets/InputWidget.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:water_tank_mobile/Pages/Widgets/progress.dart';
 
 import '../../Data/Model/SignData.dart';
+import '../../main.dart';
 import '../HomePage/HomePage.dart';
-import '../SignUpPage/SignUpPage.dart';
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignUpPage> createState() => _SignInPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignInPageState extends State<SignUpPage> {
 
+  TextEditingController? controllerName;
   TextEditingController? controllerPhone;
   TextEditingController? controllerPassword;
+  TextEditingController? controllerAddress;
+  TextEditingController? controllerEmail;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controllerPassword=TextEditingController();
     controllerPhone=TextEditingController();
   }
 
-  Future<void> login()async{
+  Future<void> signUp()async{
     showProgress(context);
     try{
       var phone= controllerPhone?.text.replaceAll("(", "").replaceAll(")", "").replaceAll("-", "");
-      var result = await API.loginUser(phone:phone??"", password: controllerPassword?.text??"");
-      if(result is Token)
+      var result = await API.signUp(phone:phone??"", password: controllerPassword?.text??"", address: controllerAddress?.text??'', name: controllerName?.text??'');
+      if(result is User)
         {
-          LocalStorage.setToken(token: result.accessToken!);
-          print(result.accessToken);
-          print(result.refreshToken);
-          print(result.expired);
           await Future.delayed(const Duration(seconds: 2));
-          Navigator.pop(context);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>const HomePage()));
+          back();
         }
     }catch(e){
 
     }
+  }
+ void back(){
+    Navigator.pop(context);
+    Navigator.pop<SignData>(context,SignData(password: controllerPassword!.text,login: controllerPhone!.text));
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(left: 30,right: 30,),
-        child: SingleChildScrollView(
+          child: SingleChildScrollView(
           child: SizedBox(
           height: MediaQuery.of(context).size.height,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("assets/images/logo.png",height: 300,width: 300,),
-                InputWidget(title: "Phone",
+                const Spacer(),
+
+                Column(
+                  children: [
+                    Image.asset("assets/images/logo.png",height: 100,width: 100,),
+                    const Text(programName,
+                    style: TextStyle(
+                      color: Color(0xff0074B4),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 32
+                    ),
+                    )
+                  ],
+                ),
+
+                const SizedBox(height: 30,),
+                /// FISH
+                InputWidget(title: "F.I.Sh",
+                  controller: controllerName,
+
+                ),
+                /// Address
+                const SizedBox(height: 20,),
+                InputWidget(title: "Manzil",
+                  controller: controllerAddress,
+
+                ),
+                ///
+                const SizedBox(height: 20,),
+                InputWidget(title: "Tel nomer",
                   controller: controllerPhone,
                   formatter: [
                     MaskedInputFormatter('+###(##)-###-##-##')
                   ],
                 ),
+                /// Email for otp
                 const SizedBox(height: 20,),
-                InputWidget(title: "password",
+                InputWidget(title: "Email",
+                  controller: controllerEmail,
+
+                ),
+                const SizedBox(height: 20,),
+                InputWidget(title: "Parol",
                   controller: controllerPassword,
                   isPassword: true,
                 ),
-                Align(alignment: Alignment.topRight,
-                child: TextButton(
-                  onPressed: (){},
-                  child: Text("Forgot Password ?",
-                  style: TextStyle(color: Color(0xff0074B4).withOpacity(0.60)),
-                  ),
-                ),
-                ),
-                const SizedBox(height: 30,),
+
+                const SizedBox(height: 10,),
                 InkWell(
-                  onTap: login,
+                  onTap: signUp,
                   child: Container(
                     width: double.infinity,
                     height: 56,
 
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(28),
-                      color: Color(0xff0074B4)
+                      color: const Color(0xff0074B4)
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text("Login",
                       style: TextStyle(
                         fontSize: 18,
@@ -106,14 +135,7 @@ class _SignInPageState extends State<SignInPage> {
                 Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Don’t Have An Account?"),TextButton(onPressed: ()async{
-                   var result =await Navigator.push<SignData?>(context, MaterialPageRoute(builder: (c)=>const SignUpPage() ));
-                   if(result!=null)
-                     {
-                       controllerPhone?.text=result.login;
-                       controllerPassword?.text=result.password;
-                     }
-                  }, child: const Text("SignIn",
+                  const Text("Don’t Have An Account?"),TextButton(onPressed: (){}, child: const Text("SignIn",
                   style: TextStyle(color: Color(0xffFC4B6F)),
                   ))
                 ],

@@ -6,13 +6,17 @@ import 'package:water_tank_mobile/Data/Model/Company.dart';
 import 'package:water_tank_mobile/Data/Model/Order.dart';
 import 'package:water_tank_mobile/Data/Model/OrdersPagenated.dart';
 import 'package:water_tank_mobile/Data/Model/Product.dart';
+import 'package:water_tank_mobile/Data/Model/User.dart';
+import 'package:water_tank_mobile/Data/Storage/LocalStorage.dart';
 import 'package:water_tank_mobile/Data/Urls/Urls.dart';
+
+import '../Data/Model/Token.dart';
 class API
 {
   static Future getHomeData()async
   {
     try{
-      var result = await http.get(Uri.parse(AppUrls.home));
+      var result = await http.get(Uri.parse(AppUrls.home), headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*',"Authorization":"Bearer ${LocalStorage.getToken()}" },);
       if(result.statusCode==200)
         {
           var r = jsonDecode(result.body);
@@ -49,7 +53,7 @@ class API
   {
     try{
       var result = await http.post(Uri.parse(AppUrls.order(quantity: quantity, productId: productId)),
-          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*' },
+          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*',"Authorization":"Bearer ${LocalStorage.getToken()}" },
       );
       print(AppUrls.order(quantity: quantity, productId: productId));
       print(result.statusCode);
@@ -72,7 +76,7 @@ class API
   {
     try{
       var result = await http.get(Uri.parse(AppUrls.orderCreated(limit: limit,page: page)),
-          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*' },
+          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*' ,"Authorization":"Bearer ${LocalStorage.getToken()}"},
       );
 
       print(result.statusCode);
@@ -93,7 +97,7 @@ class API
   {
     try{
       var result = await http.get(Uri.parse(AppUrls.orderDelivering(limit: limit,page: page)),
-          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*' },
+          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*',"Authorization":"Bearer ${LocalStorage.getToken()}" },
       );
 
       print(result.statusCode);
@@ -113,8 +117,9 @@ class API
   static Future getCompletedOrder({int limit=10,int page=1})async
   {
     try{
+      print(LocalStorage.getToken());
       var result = await http.get(Uri.parse(AppUrls.orderCompleted(limit: limit,page: page)),
-          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*' },
+          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*',"Authorization":"Bearer ${LocalStorage.getToken()}" },
       );
 
       print(result.statusCode);
@@ -123,6 +128,60 @@ class API
         {
           var r = jsonDecode(result.body);
           return  OrdersPagenated.fromJson(r);
+        }
+    }catch(e)
+    {
+    if (kDebugMode) {
+      print(e);
+    }
+    }
+  }
+  static Future loginUser({required String phone,required String password})async
+  {
+    try{
+      print(AppUrls.login);
+      var result = await http.post(Uri.parse(AppUrls.login),
+          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*' },
+        body: jsonEncode(
+            {
+              "phone" : phone,
+              "password" : password
+            }));
+
+      print(result.statusCode);
+      print(result.body);
+      if(result.statusCode==200)
+        {
+          var r = jsonDecode(result.body);
+          return  Token.fromJson(r);
+        }
+    }catch(e)
+    {
+    if (kDebugMode) {
+      print(e);
+    }
+    }
+  }
+  static Future signUp({required String phone,required String address,required String name,required String password})async
+  {
+    try{
+      print(AppUrls.signUp);
+      var result = await http.post(Uri.parse(AppUrls.signUp),
+          headers: {'Content-Type': 'application/json; charset=UTF-8', 'accept':'*/*' },
+        body: jsonEncode(
+            {
+              "name": name,
+              "address": address,
+              "phone": phone,
+              "password": password
+            }));
+
+      print(result.statusCode);
+      print(result.body);
+      if(result.statusCode==200)
+        {
+          var r = jsonDecode(result.body);
+          return  User.fromJson(r);
         }
     }catch(e)
     {

@@ -6,6 +6,8 @@ class AppUrls
   static const String home="$_baseApi/Product/$_companyId/Company";
   static const String images="$_base/Images/";
   static const String company="$_baseApi/Company/$_companyId/";
+  static const String login="$_baseApi/Auth/User";
+  static const String signUp="$_baseApi/User/$_companyId";
   static  String  order({required int quantity,required int productId})=>"$_baseApi/Order/User/$productId?Quantity=$quantity";
   static  String  orderCreated({ int limit=10,int page=1})=>"$_baseApi/Order/User/Created?limit=$limit&page=$page";
   static  String  orderDelivering({int limit=10,int page=1})=>"$_baseApi/Order/User/Delivering?Page=$page&Limit=$limit";

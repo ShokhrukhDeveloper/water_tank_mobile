@@ -32,7 +32,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: NetworkImage("${widget.url}"),
+                image: NetworkImage(widget.url??""),
                 fit: BoxFit.cover
               )
             ),
