@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:water_tank_mobile/Data/Storage/LocalStorage.dart';
+import 'package:water_tank_mobile/Pages/SignInPage/SignInPage.dart';
 
 class Account extends StatelessWidget {
   const Account({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class Account extends StatelessWidget {
 
         onPressed: (){
          LocalStorage.removeToken();
-
+         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (c)=>const SignInPage()), (route) => false);
         }, child: const Row(
       mainAxisSize: MainAxisSize.min,
           children: [
